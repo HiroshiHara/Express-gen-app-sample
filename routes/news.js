@@ -10,13 +10,13 @@ router.get("/", (req, res, next) => {
 		path: "/rss?hl=ja&ie=UTF-8&oe=UTF-8&gl=JP&ceid=JP:ja",
 	};
 	https.get(opt, (res2) => {
+		// console.log(JSON.stringify(res2.headers));
 		let body = "";
 		res2.on("data", (data) => {
 			body += data;
 		});
 		res2.on("end", () => {
 			parseString(body.trim(), (err, result) => {
-				console.log(result);
 				const data = {
 					title: "Google News",
 					content: result.rss.channel[0].item,
