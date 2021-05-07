@@ -3,6 +3,7 @@ var express = require("express"); // Express本体
 var path = require("path"); // ファイルパス処理
 var cookieParser = require("cookie-parser"); // クッキーのパース処理
 var logger = require("morgan"); // HTTPリクエストのログ出力
+const session = require("express-session"); // セッション管理パッケージ
 
 // ルーティング用モジュールのロード
 // 各URLへのアクセス時の処理を個別にrouteフォルダに用意し、
@@ -10,6 +11,7 @@ var logger = require("morgan"); // HTTPリクエストのログ出力
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var helloRouter = require("./routes/hello");
+var newsRouter = require("./routes/news");
 
 // Expressモジュールの作成
 var app = express();
@@ -29,10 +31,22 @@ app.use(express.urlencoded({ extended: false })); // URLエンコードされた
 app.use(cookieParser()); // リクエスト内のcookieを解析できるようにする
 app.use(express.static(path.join(__dirname, "public"))); // アプリケーションの静的ファイルの場所をセット
 
+// セッション管理オプション設定
+const session_opt = {
+	secret: "keyboard cat",
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		maxAge: 60 * 60 * 1000,
+	},
+};
+app.use(session(session_opt));
+
 // 各URLへのアクセス時の関連付け
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/hello", helloRouter);
+app.use("/news", newsRouter);
 
 // catch 404 and forward to error handler
 // 不正なURLにアクセスされたとき404エラーを出す
