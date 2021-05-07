@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const https = require("https");
-const parseString = require("xml2js").parseString;
+const parseString = require("xml2js").parseString; //xmlを解析する
 
 router.get("/", (req, res, next) => {
 	const opt = {
@@ -9,6 +9,7 @@ router.get("/", (req, res, next) => {
 		port: 443,
 		path: "/rss?hl=ja&ie=UTF-8&oe=UTF-8&gl=JP&ceid=JP:ja",
 	};
+	// 外部RSS提供サイトにGETリクエストを送信し、xml形式で受信する
 	https.get(opt, (res2) => {
 		// console.log(JSON.stringify(res2.headers));
 		let body = "";
